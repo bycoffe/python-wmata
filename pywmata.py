@@ -1,0 +1,55 @@
+from urllib import urlencode
+from urllib2 import urlopen
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+
+class WmataException(Exception):
+    pass
+
+
+class Wmata(object):
+
+    base_url = 'http://api.wmata.com/%(svc)s.svc/json/%(endpoint)s'
+
+    def __init__(self, apikey):
+        self.apikey = apikey
+
+    def _build_url(self, svc, endpoint, query={}):
+        query.update({'api_key': self.apikey})
+        url = self.base_url % {'svc': svc, 'endpoint': endpoint}
+        return '%s?%s' % (url, urlencode(query))
+
+    def _get(self, svc, endpoint, query={}):
+        self.url = self._build_url(svc, endpoint, query)
+        response = urlopen(self.url)
+
+        if response.msg == 'OK':
+            self.data = json.loads(response.read())
+            return self.data
+
+        raise WmataException('Got invalid response from WMATA server: %s' % response.msg)
+
+    def lines(self):
+        return self._get('Rail', 'JLines')['Lines']
+
+    def stations(self, line_code):
+        return self._get('Rail', 'JStations', {'LineCode': line_code})['Stations']
+
+    def station_info(self, station_code):
+        return self._get('Rail', 'JStationInfo', {'StationCode': station_code})
+
+    def rail_path(self, from_station_code, to_station_code):
+        return self._get('Rail', 'JPath', {'FromStationCode': from_station_code, 'ToStationCode': to_station_code})['Path']
+
+    def rail_predictions(self, station_code='All'):
+        return self._get('StationPrediction', 'GetPrediction/%s' % station_code)['Trains']
+
+    def rail_incidents(self):
+        return self._get('Incidents', 'Incidents')
+
+    def elevator_incidents(self, station_code='All'):
+        return self._get('Incidents', 'ElevatorIncidents', {'StationCode': station_code})

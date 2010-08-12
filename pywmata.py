@@ -53,3 +53,6 @@ class Wmata(object):
 
     def elevator_incidents(self, station_code='All'):
         return self._get('Incidents', 'ElevatorIncidents', {'StationCode': station_code})
+
+    def station_entrances(self, latitude=0, longitude=0, radius=0):
+        return self._get('Rail', 'JStationEntrances', {'lat': latitude, 'lon': longitude, 'radius': radius})['Entrances']

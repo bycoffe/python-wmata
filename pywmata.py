@@ -1,3 +1,4 @@
+import datetime
 from urllib import urlencode
 from urllib2 import urlopen
 
@@ -56,3 +57,35 @@ class Wmata(object):
 
     def station_entrances(self, latitude=0, longitude=0, radius=0):
         return self._get('Rail', 'JStationEntrances', {'lat': latitude, 'lon': longitude, 'radius': radius})['Entrances']
+
+    def bus_routes(self):
+        return self._get('Bus', 'JRoutes')['Routes']
+
+    def bus_stops(self):
+        return self._get('Bus', 'JStops')['Stops']
+
+    def bus_schedule_by_route(self, route_id, date=None, including_variations=False):
+        if date is None:
+            date = datetime.date.today().strftime('%Y-%m-%d')
+        if including_variations:
+            including_variations = 'true'
+        else:
+            including_variations = 'false'
+        return self._get('Bus', 'JRouteSchedule', {'routeId': route_id, 'date': date, 'includingVariations': including_variations})
+
+    def bus_route_details(self, route_id, date=None):
+        if date is None:
+            date = datetime.date.today().strftime('%Y-%m-%d')
+        return self._get('Bus', 'JRouteDetails', {'routeId': route_id, 'date': date})
+
+    def bus_positions(self, route_id, including_variations=False):
+        if including_variations:
+            including_variations = 'true'
+        else:
+            including_variations = 'false'
+        return self._get('Bus', 'JBusPositions', {'routeId': route_id, 'includingVariations': including_variations})
+
+    def bus_schedule_by_stop(self, stop_id, date=None):
+        if date is None:
+            date = datetime.date.today().strftime('%Y-%m-%d')
+        return self._get('Bus', 'JStopSchedule', {'stopId': stop_id, 'date': date})

@@ -83,7 +83,7 @@ class Wmata(object):
             including_variations = 'true'
         else:
             including_variations = 'false'
-        return self._get('Bus', 'JBusPositions', {'routeId': route_id, 'includingVariations': including_variations})
+        return self._get('Bus', 'JBusPositions', {'routeId': route_id, 'includingVariations': including_variations})['BusPositions']
 
     def bus_schedule_by_stop(self, stop_id, date=None):
         if date is None:

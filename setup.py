@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-long_description = open('README').read()
+long_description = open('README.md').read()
 
 setup(name="python-wmata",
       version='0.1',

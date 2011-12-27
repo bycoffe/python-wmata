@@ -97,7 +97,7 @@ Python >= 2.6 or (Python >= 2.5 and simplejson)
       u'StationName': u'Federal Center SW'}]
 
     >>> # Get the current rail predictions for station F04 (Waterfront/SEU):
-    >>> predictions = api.rail_prediction('F04')
+    >>> predictions = api.rail_predictions('F04')
     >>> print predictions
     [{u'Car': u'6',
       u'Destination': u'Grnbelt',

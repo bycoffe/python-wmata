@@ -89,3 +89,6 @@ class Wmata(object):
         if date is None:
             date = datetime.date.today().strftime('%Y-%m-%d')
         return self._get('Bus', 'JStopSchedule', {'stopId': stop_id, 'date': date})
+
+    def bus_prediction(self, stop_id):
+        return self._get('NextBusService', 'JPredictions', {'stopId': stop_id})

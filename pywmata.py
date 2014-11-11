@@ -21,6 +21,7 @@ class Wmata(object):
 
     def _build_url(self, svc, endpoint, query={}):
         query.update({'api_key': self.apikey})
+        query.update({'subscription-key': self.apikey})
         url = self.base_url % {'svc': svc, 'endpoint': endpoint}
         return '%s?%s' % (url, urlencode(query))
 
